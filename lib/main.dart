@@ -40,9 +40,10 @@ class MatchState extends State<MatchDayChatApp> {
                   if (!snapshot.hasData) return const Text("Not data found");
                   return new ListView.builder(
                       itemCount: snapshot.data.documents.length,
-                      itemExtent: 105.0,
+                      itemExtent: 85.0,
                       itemBuilder: (context, index) {
                         DocumentSnapshot ds = snapshot.data.documents[index];
+                        print("${ds["awayLogo"]}");
                         return new FlatButton(
                           onPressed: () {
                             Navigator.push(
@@ -51,11 +52,11 @@ class MatchState extends State<MatchDayChatApp> {
                                     builder: (context) => new ChatScreen()));
                           },
                           child: new MatchCell(
-                              " ${ds['awayTeam']}",
-                              " ${ds['homeTeam']}",
-                              " ${ds['awayLogo']}",
-                              " ${ds['homeLogo']}",
-                              " ${ds['kickOffTime']}"),
+                              "${ds['awayTeam']}",
+                              "${ds['homeTeam']}",
+                              "${ds['awayLogo']}",
+                              "${ds['homeLogo']}",
+                              "${ds['kickOffTime']}"),
                           padding: new EdgeInsets.all(0.0),
                         );
                       });

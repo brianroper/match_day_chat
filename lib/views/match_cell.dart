@@ -3,25 +3,29 @@ import 'package:flutter/material.dart';
 class MatchCell extends StatelessWidget {
   final awayTeam;
   final homeTeam;
-  final awayTeamUrl;
-  final homeTeamUrl;
+  final awayLogo;
+  final homeLogo;
   final kickOffTime;
 
-  MatchCell(this.awayTeam, this.homeTeam, this.awayTeamUrl, this.homeTeamUrl,
+  final logoSize = 40.0;
+
+  MatchCell(this.awayTeam, this.homeTeam, this.awayLogo, this.homeLogo,
       this.kickOffTime);
 
   @override
   Widget build(BuildContext context) {
     return new Card(
       child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           new Container(
             margin: new EdgeInsets.all(8.0),
             child: new Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                new Image.network(homeTeamUrl, height: 35.0),
+                new Image.network(homeLogo, height: logoSize, width: logoSize),
                 new Text(homeTeam)
               ],
             ),
@@ -29,6 +33,7 @@ class MatchCell extends StatelessWidget {
           new Container(
             margin: new EdgeInsets.all(4.0),
             child: new Column(
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 new Text(kickOffTime),
                 new Text("Tommorow"),
@@ -38,8 +43,9 @@ class MatchCell extends StatelessWidget {
           new Container(
             margin: new EdgeInsets.all(8.0),
             child: new Column(
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                new Image.network(awayTeamUrl, height: 35.0),
+                new Image.network(awayLogo, height: logoSize, width: logoSize),
                 new Text(awayTeam)
               ],
             ),
