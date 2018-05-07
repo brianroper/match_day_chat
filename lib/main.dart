@@ -40,7 +40,7 @@ class MatchState extends State<MatchDayChatApp> {
                   if (!snapshot.hasData) return const Text("Not data found");
                   return new ListView.builder(
                       itemCount: snapshot.data.documents.length,
-                      itemExtent: 85.0,
+                      itemExtent: 115.0,
                       itemBuilder: (context, index) {
                         DocumentSnapshot ds = snapshot.data.documents[index];
                         print("${ds["awayLogo"]}");
@@ -88,3 +88,5 @@ class ChatState extends State<ChatScreen> {
     );
   }
 }
+
+
