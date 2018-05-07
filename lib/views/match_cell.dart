@@ -1,47 +1,52 @@
 import 'package:flutter/material.dart';
 
 class MatchCell extends StatelessWidget {
-  //final match;
-  final _testUrl =
-      "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/New_York_Red_Bulls_logo.svg/1200px-New_York_Red_Bulls_logo.svg.png";
+  final awayTeam;
+  final homeTeam;
+  final awayTeamUrl;
+  final homeTeamUrl;
+  final kickOffTime;
 
-  //MatchCell(this.match);
+  MatchCell(this.awayTeam, this.homeTeam, this.awayTeamUrl, this.homeTeamUrl,
+      this.kickOffTime);
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        new Container(
-          padding: new EdgeInsets.all(16.0),
-          child: new Column(
-            children: <Widget>[
-              new Image.network(_testUrl, height: 50.0),
-              new Text("New York Red Bull")
-            ],
+    return new Card(
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+            margin: new EdgeInsets.all(8.0),
+            child: new Column(
+              children: <Widget>[
+                new Image.network(homeTeamUrl, height: 35.0),
+                new Text(homeTeam)
+              ],
+            ),
           ),
-        ),
-        new Container(
-          padding: new EdgeInsets.all(16.0),
-          child: new Column(
-            children: <Widget>[
-              new Text("8:45 PM"),
-              new Text("Tommorow"),
-            ],
+          new Container(
+            margin: new EdgeInsets.all(4.0),
+            child: new Column(
+              children: <Widget>[
+                new Text(kickOffTime),
+                new Text("Tommorow"),
+              ],
+            ),
           ),
-        ),
-        new Container(
-          padding: new EdgeInsets.all(16.0),
-          child: new Column(
-            children: <Widget>[
-              new Image.network(_testUrl, height: 50.0),
-              new Text("New York Red Bull")
-            ],
+          new Container(
+            margin: new EdgeInsets.all(8.0),
+            child: new Column(
+              children: <Widget>[
+                new Image.network(awayTeamUrl, height: 35.0),
+                new Text(awayTeam)
+              ],
+            ),
           ),
-        ),
-        new Divider()
-      ],
+          new Divider()
+        ],
+      ),
     );
   }
 }
