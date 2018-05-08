@@ -7,11 +7,11 @@ void main() => runApp(new MatchDayChatApp());
 class MatchDayChatApp extends StatefulWidget {
   @override
   State createState() {
-    return new MatchState();
+    return new MatchScreenState();
   }
 }
 
-class MatchState extends State<MatchDayChatApp> {
+class MatchScreenState extends State<MatchDayChatApp> {
   var _isLoading = true;
 
   @override
@@ -43,7 +43,6 @@ class MatchState extends State<MatchDayChatApp> {
                       itemExtent: 115.0,
                       itemBuilder: (context, index) {
                         DocumentSnapshot ds = snapshot.data.documents[index];
-                        print("${ds["awayLogo"]}");
                         return new FlatButton(
                           onPressed: () {
                             Navigator.push(
@@ -69,12 +68,14 @@ class MatchState extends State<MatchDayChatApp> {
 class ChatScreen extends StatefulWidget {
   @override
   State createState() {
-    return new ChatState();
+    return new ChatScreenState();
   }
 }
 
-class ChatState extends State<ChatScreen> {
+class ChatScreenState extends State<ChatScreen> {
   var _isLoading = true;
+  final TextEditingController _textController = new TextEditingController();
+  final List<ChatMessage> _messages = <ChatMessage>[];
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +83,92 @@ class ChatState extends State<ChatScreen> {
       appBar: new AppBar(
         title: new Text("Match Chat Screen"),
       ),
-      body: new Center(
-        child: new Text("Chat will go here"),
+      body: new Column(
+        children: <Widget>[
+          new Flexible(
+              child: new ListView.builder(
+                itemBuilder: (_, int index) => _messages[index],
+                padding: new EdgeInsets.all(8.0),
+                reverse: true,
+                itemCount: _messages.length,
+          ),
+          ),
+          new Divider(height: 1.0),
+          new Container(
+            decoration: new BoxDecoration(
+              color: Theme.of(context).cardColor),
+            child: _buildTextComposer(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextComposer() {
+    return new IconTheme(
+        data: new IconThemeData(color: Theme.of(context).accentColor),
+        child: new Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: new Row(
+              children: <Widget>[
+                new Flexible(
+                  child: new TextField(
+                    controller: _textController,
+                    onSubmitted: _postMessage,
+                    decoration: new InputDecoration.collapsed(
+                        hintText: "Send a message"),
+                  ),
+                ),
+                new Container(
+                  margin: new EdgeInsets.symmetric(horizontal: 4.0),
+                  child: new IconButton(
+                      icon: new Icon(Icons.send),
+                      onPressed: () => _postMessage(_textController.text)),
+                )
+              ],
+            )));
+  }
+
+  //sends message to cloud firestore
+  void _postMessage(String text) {
+    _textController.clear();
+    ChatMessage message = new ChatMessage(
+      text: text,
+    );
+    setState(() {
+      _messages.insert(0, message);
+    });
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  final String text;
+
+  ChatMessage({this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Container(
+            margin: const EdgeInsets.only(right: 16.0),
+            child: new CircleAvatar(child: new Text("Username")),
+          ),
+          new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Text("Username", style: Theme.of(context).textTheme.subhead),
+              new Container(
+                margin: const EdgeInsets.only(top: 5.0),
+                child: new Text(text),
+              )
+            ],
+          )
+        ],
       ),
     );
   }
 }
-
-
