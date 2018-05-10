@@ -67,22 +67,6 @@ class MatchScreenState extends State<MatchDayChatApp> {
   }
 }
 
-StreamBuilder _getFireStoreChat(String key) {
-  return new StreamBuilder(
-      stream: Firestore.instance.collection('matches/' + key + "/chat").snapshots(),
-      builder: (context, snapshot) {
-        if(!snapshot.hasData) return CircularProgressIndicator();
-        return new ListView.builder(
-            padding: new EdgeInsets.all(8.0),
-            reverse: true,
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot ds = snapshot.data.documents[index];
-              return ChatCell("${ds['message']}");
-            });
-      });
-}
-
 //Chat Screen
 class ChatScreen extends StatefulWidget {
   final String activeKey;
@@ -99,7 +83,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   var _isLoading = false;
   final TextEditingController _textController = new TextEditingController();
   final String activeKey;
-  //  final List<ChatMessage> _messages = <ChatMessage>[];
+  ScrollController _scrollController;
 
   ChatScreenState(this.activeKey);
 
@@ -121,6 +105,23 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           )
         ],
       )
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = new ScrollController(
+      initialScrollOffset: 0.0,
+      keepScrollOffset: true,
+    );
+  }
+
+  void _toEnd() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
     );
   }
 
@@ -151,61 +152,37 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   //sends message to cloud firestore
-  void _postMessage(String text) {
-    _textController.clear();
-//    ChatMessage message = new ChatMessage(
-//        text: text,
-//        animationController: new AnimationController(
-//            vsync: this, duration: new Duration(milliseconds: 300)));
-//    setState(() {
-//      _messages.insert(0, message);
-//    });
-//    message.animationController.forward();
+  void _postMessage(String message) {
+    Firestore.instance.collection('matches/' + activeKey + '/chat').document()
+        .setData(newMessage(message)).whenComplete((){
+      _textController.clear();
+      _toEnd();
+    }).catchError((e) => print(e));
   }
 
-//  @override
-//  void dispose() {
-//    for (ChatMessage message in _messages)
-//      message.animationController.dispose();
-//    super.dispose();
-//  }
+  Map<String, String> newMessage(String message){
+    Map<String, String> data = <String, String>{
+      "username": "test1234",
+      "message": message,
+      "timestamp": "12334556789"
+      //TODO: get true values ^
+    };
+    return data;
+  }
+
+  StreamBuilder _getFireStoreChat(String key) {
+    return new StreamBuilder(
+        stream: Firestore.instance.collection('matches/' + key + "/chat").snapshots(),
+        builder: (context, snapshot) {
+          if(!snapshot.hasData) return CircularProgressIndicator();
+          return new ListView.builder(
+              padding: new EdgeInsets.all(8.0),
+              itemCount: snapshot.data.documents.length,
+              controller: _scrollController,
+              itemBuilder: (context, index) {
+                DocumentSnapshot ds = snapshot.data.documents[index];
+                return ChatCell("${ds['message']}", "${ds['username']}", "${ds['timestamp']}");
+              });
+        });
+  }
 }
-
-
-//class ChatMessage extends StatelessWidget {
-//  final String text;
-//  final AnimationController animationController;
-//
-//  ChatMessage({this.text, this.animationController});
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return new SizeTransition(
-//      sizeFactor: new CurvedAnimation(
-//          parent: animationController, curve: Curves.easeInOut),
-//      axisAlignment: 0.0,
-//      child: new Container(
-//        margin: const EdgeInsets.symmetric(vertical: 10.0),
-//        child: new Row(
-//          crossAxisAlignment: CrossAxisAlignment.start,
-//          children: <Widget>[
-//            new Container(
-//              margin: const EdgeInsets.only(right: 16.0),
-//              child: new CircleAvatar(child: new Text("U")),
-//            ),
-//            new Column(
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: <Widget>[
-//                new Text("Username", style: Theme.of(context).textTheme.subhead),
-//                new Container(
-//                  margin: const EdgeInsets.only(top: 5.0),
-//                  child: new Text(text),
-//                )
-//              ],
-//            )
-//          ],
-//        ),
-//      ),
-//    );
-//  }
-//}
