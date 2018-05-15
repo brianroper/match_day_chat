@@ -31,17 +31,14 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
         body: new Column(
           children: <Widget>[
-            new Flexible(
-                child: _getFireStoreChat(activeKey)
-            ),
+            new Flexible(child: _getFireStoreChat(activeKey)),
             new Divider(height: 1.0),
             new Container(
               decoration: new BoxDecoration(color: Theme.of(context).cardColor),
               child: _buildTextComposer(),
             )
           ],
-        )
-    );
+        ));
   }
 
   @override
@@ -63,41 +60,45 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   //handled text entry
   Widget _buildTextComposer() {
-    return new IconTheme(
-        data: new IconThemeData(color: kMatchDayBackgroundWhite),
-        child: new Container(
-          color: kMatchDaySurfaceGrey,
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: new Row(
-              children: <Widget>[
-                new Flexible(
-                  child: new TextField(
-                    controller: _textController,
-                    onSubmitted: _postMessage,
-                    decoration: new InputDecoration.collapsed(
-                        hintText: "Send a message"),
-                  ),
-                ),
-                new Container(
-                  margin: new EdgeInsets.symmetric(horizontal: 4.0),
-                  child: new IconButton(
-                      icon: new Icon(Icons.send),
-                      onPressed: () => _postMessage(_textController.text)),
-                )
-              ],
-            )));
+    return new Container(
+        color: kMatchDaySurfaceGrey,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: new Row(
+          children: <Widget>[
+            new Flexible(
+              child: _buildTextField("Send a message"),
+            ),
+            new Container(
+              child: new IconButton(
+                  icon: new Icon(Icons.send),
+                  color: kMatchDaySurfaceWhite,
+                  onPressed: () => _postMessage(_textController.text)),
+            )
+          ],
+        ));
+  }
+
+  Widget _buildTextField(String label) {
+    return new TextField(
+      controller: _textController,
+      onSubmitted: _postMessage,
+      decoration: new InputDecoration.collapsed(hintText: label),
+    );
   }
 
   //sends message to cloud firestore
   void _postMessage(String message) {
-    Firestore.instance.collection('matches/' + activeKey + '/chat').document()
-        .setData(newMessage(message)).whenComplete((){
+    Firestore.instance
+        .collection('matches/' + activeKey + '/chat')
+        .document()
+        .setData(newMessage(message))
+        .whenComplete(() {
       _textController.clear();
       _toEnd();
     }).catchError((e) => print(e));
   }
 
-  Map<String, String> newMessage(String message){
+  Map<String, String> newMessage(String message) {
     Map<String, String> data = <String, String>{
       "username": "test1234",
       "message": message,
@@ -109,16 +110,19 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   StreamBuilder _getFireStoreChat(String key) {
     return new StreamBuilder(
-        stream: Firestore.instance.collection('matches/' + key + "/chat").snapshots(),
+        stream: Firestore.instance
+            .collection('matches/' + key + "/chat")
+            .snapshots(),
         builder: (context, snapshot) {
-          if(!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData) return CircularProgressIndicator();
           return new ListView.builder(
               padding: new EdgeInsets.all(8.0),
               itemCount: snapshot.data.documents.length,
               controller: _scrollController,
               itemBuilder: (context, index) {
                 DocumentSnapshot ds = snapshot.data.documents[index];
-                return ChatCell("${ds['message']}", "${ds['username']}", "${ds['timestamp']}");
+                return ChatCell("${ds['message']}", "${ds['username']}",
+                    "${ds['timestamp']}");
               });
         });
   }
