@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:match_day_chat/colors.dart';
+import 'match_screen.dart';
 
 final ThemeData _kMatchDayTheme = _buildTheme();
 
@@ -111,7 +112,10 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginWithCredentials(String username, String password) {
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new MatchDayChatApp()),
+    );
   }
 }
 
