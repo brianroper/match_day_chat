@@ -11,3 +11,5 @@ const kMatchDayErrorRed = const Color(0xFFC5032B);
 
 const kMatchDaySurfaceWhite = const Color(0xFFFFFBFA);
 const kMatchDayBackgroundWhite = Colors.white;
+
+const kMatchDaySurfaceTrans = const Color(0x8A007586);
