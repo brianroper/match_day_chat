@@ -15,7 +15,7 @@ ThemeData _buildTheme() {
     primaryColor: kMatchDayBlue600,
     accentColor: kMatchDayRed900,
     buttonColor: kMatchDayBlue400,
-    scaffoldBackgroundColor: kMatchDayBackgroundWhite,
+    scaffoldBackgroundColor: kMatchDaySurfaceBlack,
     cardColor: kMatchDayBackgroundWhite,
     textSelectionColor: kMatchDayBlue200,
     errorColor: kMatchDayErrorRed,
@@ -42,6 +42,6 @@ TextTheme _buildTextTheme(TextTheme base) {
       .apply(
         fontFamily: 'Rubik',
         displayColor: kMatchDayRed900,
-        bodyColor: kMatchDayRed900,
+        bodyColor: Colors.white,
       );
 }

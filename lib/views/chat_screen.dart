@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'chat_cell.dart';
+import 'package:match_day_chat/colors.dart';
 
 //Chat Screen
 class ChatScreen extends StatefulWidget {
@@ -63,9 +64,10 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   //handled text entry
   Widget _buildTextComposer() {
     return new IconTheme(
-        data: new IconThemeData(color: Theme.of(context).accentColor),
+        data: new IconThemeData(color: kMatchDayBackgroundWhite),
         child: new Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          color: kMatchDaySurfaceGrey,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: new Row(
               children: <Widget>[
                 new Flexible(

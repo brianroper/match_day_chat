@@ -13,7 +13,6 @@ class MatchDayChatApp extends StatefulWidget {
 }
 
 class MatchScreenState extends State<MatchDayChatApp> {
-  var _isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,42 +24,42 @@ class MatchScreenState extends State<MatchDayChatApp> {
               icon: new Icon(Icons.refresh),
               onPressed: () {
                 print("Refreshing list");
-                setState(() {
-                  _isLoading = false;
-                });
+                _buildMatchStream();
               })
         ],
       ),
       body: new Center(
-        child: _isLoading
-            ? new CircularProgressIndicator()
-            : new StreamBuilder(
-            stream: Firestore.instance.collection('matches').snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const Text("Not data found");
-              return new ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemExtent: 115.0,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data.documents[index];
-                    return new FlatButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new ChatScreen(ds.documentID)));
-                      },
-                      child: new MatchCell(
-                          "${ds['awayTeam']}",
-                          "${ds['homeTeam']}",
-                          "${ds['awayLogo']}",
-                          "${ds['homeLogo']}",
-                          "${ds['kickOffTime']}"),
-                      padding: new EdgeInsets.all(0.0),
-                    );
-                  });
-            }),
-      ),
+          child:  _buildMatchStream()),
     );
+  }
+
+  Widget _buildMatchStream() {
+    return new StreamBuilder(
+        stream: Firestore.instance.collection('matches').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return new CircularProgressIndicator();
+          return new ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemExtent: 115.0,
+              itemBuilder: (context, index) {
+                DocumentSnapshot ds = snapshot.data.documents[index];
+                return new FlatButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) =>
+                                new ChatScreen(ds.documentID)));
+                  },
+                  child: new MatchCell(
+                      "${ds['awayTeam']}",
+                      "${ds['homeTeam']}",
+                      "${ds['awayLogo']}",
+                      "${ds['homeLogo']}",
+                      "${ds['kickOffTime']}"),
+                  padding: new EdgeInsets.all(0.0),
+                );
+              });
+        });
   }
 }

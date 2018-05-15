@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:match_day_chat/colors.dart';
 
 class MatchCell extends StatelessWidget {
   final awayTeam;
@@ -16,6 +17,7 @@ class MatchCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Card(
+      color: kMatchDaySurfaceGrey,
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
