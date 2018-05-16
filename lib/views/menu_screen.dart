@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:match_day_chat/colors.dart';
 import 'package:meta/meta.dart';
-
-enum Category { a, b, c, d, e, f, g, h}
+import 'package:match_day_chat/models/category.dart';
 
 class MenuScreen extends StatelessWidget {
   final Category currentCategory;

@@ -109,7 +109,7 @@ class LoginScreenState extends State<LoginScreen> {
   void _loginWithCredentials(String username, String password) {
     Navigator.push(
       context,
-      new MaterialPageRoute(builder: (context) => new MatchDayChatApp()),
+      new MaterialPageRoute(builder: (context) => new MatchScreen()),
     );
   }
 }

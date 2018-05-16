@@ -5,29 +5,18 @@ import 'chat_screen.dart';
 import 'match_cell.dart';
 
 //Match Screen
-class MatchDayChatApp extends StatefulWidget {
+class MatchScreen extends StatefulWidget {
   @override
   State createState() {
     return new MatchScreenState();
   }
 }
 
-class MatchScreenState extends State<MatchDayChatApp> {
+class MatchScreenState extends State<MatchScreen> {
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Match Day Chat"),
-        actions: <Widget>[
-          new IconButton(
-              icon: new Icon(Icons.refresh),
-              onPressed: () {
-                print("Refreshing list");
-                _buildMatchStream();
-              })
-        ],
-      ),
       body: new Center(
           child:  _buildMatchStream()),
     );
