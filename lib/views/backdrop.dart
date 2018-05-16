@@ -40,7 +40,10 @@ class BackdropState extends State<Backdrop>
       brightness: Brightness.light,
       elevation: 0.0,
       leading: IconButton(
-        icon: Icon(Icons.menu),
+        icon: AnimatedIcon(
+          icon: AnimatedIcons.close_menu,
+          progress: _controller.view,
+        ),
         onPressed: _toggleBackdropPanelVisibility,
       ),
       title: Text('Matches'),
