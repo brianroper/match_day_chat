@@ -25,7 +25,10 @@ class AppState extends State<App>{
       home: Backdrop(
         currentCategory: Category.all,
         frontPanel: MatchScreen(),
-        backPanel: Container(color: kMatchDayBlue600),
+        backPanel: MenuScreen(
+          currentCategory: _currentCategory,
+          onCategoryTap: _onCategoryTap,
+        ),
         frontTitle: Text('Matches'),
         backTitle: Text('Groups'),
       ),

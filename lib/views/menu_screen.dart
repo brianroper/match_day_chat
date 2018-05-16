@@ -24,13 +24,12 @@ class MenuScreen extends StatelessWidget {
     return Center(
       child: Container(
         padding: EdgeInsets.only(top: 40.0),
-        color: kMatchDayErrorRed,
+        color: kMatchDayBlue600,
         child: ListView(children: menuItems),
       ),
     );
   }
 
-  //TODO: adjust theming
   Widget _buildCategory(Category category, BuildContext context){
     var categoryString =
     category.toString().replaceAll('Category.', '').toUpperCase();
@@ -42,6 +41,7 @@ class MenuScreen extends StatelessWidget {
           SizedBox(height: 16.0),
           Text(
             categoryString,
+            style: Theme.of(context).textTheme.body2,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 14.0),
@@ -56,6 +56,9 @@ class MenuScreen extends StatelessWidget {
            padding: EdgeInsets.symmetric(vertical: 16.0),
            child: Text(
              categoryString,
+             style: Theme.of(context).textTheme.body2.copyWith(
+               color: kMatchDayBackgroundWhite.withAlpha(153),
+             ),
              textAlign: TextAlign.center,
            ),
          )
